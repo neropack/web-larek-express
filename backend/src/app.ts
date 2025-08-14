@@ -3,6 +3,8 @@ import 'dotenv/config';
 import cors from 'cors';
 import mongoose from 'mongoose';
 
+import productRoutes from '../routes/product';
+
 const PORT = process.env.PORT || 2000;
 const DB_ADD: string = process.env.DB_ADDRESS || 'mongodb://localhost:27017/mydb';
 
@@ -12,6 +14,8 @@ mongoose.connect(DB_ADD).then(() => {
 });
 
 app.use(cors());
+
+app.use('/product', productRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
