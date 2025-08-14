@@ -2,6 +2,7 @@ import express from 'express';
 import 'dotenv/config';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import path from 'path';
 
 import productRoutes from '../routes/product';
 
@@ -14,6 +15,7 @@ mongoose.connect(DB_ADD).then(() => {
 });
 
 app.use(cors());
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/product', productRoutes);
 
