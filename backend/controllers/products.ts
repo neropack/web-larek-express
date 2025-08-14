@@ -1,21 +1,38 @@
-import { Request, Response } from 'express';
-import Product from '../models/product';
+import { NextFunction, Request, Response } from 'express';
+import { Error as MongooseError } from 'mongoose';
 
-export const getProducts = async (_: Request, res: Response) => {
+import Product from '../models/product';
+import ConflictError from '../errors/conflict-error';
+import BadRequestError from '../errors/bad-request-error';
+
+export const getProducts = async (_: Request, res: Response, next: NextFunction) => {
   try {
     const products = await Product.find();
     res.json({ items: products, total: products.length });
   } catch (error) {
-    res.status(500).json({ message: 'Error getting products' });
+    if (error instanceof MongooseError.ValidationError) {
+      return next(new BadRequestError(error.message));
+    }
+    return next(error);
   }
 };
 
-export const createProduct = async (req: Request, res: Response) => {
+export const createProduct = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const { title } = req.body;
+    const existingProduct = await Product.findOne({ title });
+    if (existingProduct) {
+      return next(new ConflictError('Продукт с таким заголовком уже существует'));
+    }
+
     const product = new Product(req.body);
     await product.save();
+
     res.status(201).json(product);
   } catch (error) {
-    res.status(400).json({ message: 'Error creating product' });
+    if (error instanceof MongooseError.ValidationError) {
+      return next(new BadRequestError(error.message));
+    }
+    return next(error);
   }
 };
