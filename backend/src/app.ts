@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import path from 'path';
 
 import productRoutes from '../routes/product';
+import orderRoutes from '../routes/order';
 
 const PORT = process.env.PORT || 2000;
 const DB_ADD: string = process.env.DB_ADDRESS || 'mongodb://localhost:27017/mydb';
@@ -15,9 +16,11 @@ mongoose.connect(DB_ADD).then(() => {
 });
 
 app.use(cors());
+app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/product', productRoutes);
+app.use('/order', orderRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
