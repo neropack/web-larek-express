@@ -1,10 +1,10 @@
-import { Response } from 'express';
+import { Request, Response } from 'express';
 
 import BadRequestError from '../errors/bad-request-error';
 import ConflictError from '../errors/conflict-error';
 import NotFoundError from '../errors/not-found-error';
 
-const errorMiddleware = (err: Error, res: Response) => {
+const errorMiddleware = (err: Error, _: Request, res: Response) => {
   // можно сделать один файл с классами ошибок которые будут наследовать один класс
   if (
     err instanceof BadRequestError
