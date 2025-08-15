@@ -33,6 +33,9 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
     if (error instanceof MongooseError.ValidationError) {
       return next(new BadRequestError(error.message));
     }
+    if (error instanceof Error && error.message.includes('E11000')) {
+      return next(new ConflictError('Продукт с таким заголовком уже существует'));
+    }
     return next(error);
   }
 };
