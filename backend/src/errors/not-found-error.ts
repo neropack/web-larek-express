@@ -1,6 +1,4 @@
-import { Error as MongooseError } from 'mongoose';
-
-class NotFoundError extends MongooseError {
+class NotFoundError extends Error {
   public statusCode: number;
 
   constructor(message: string) {
