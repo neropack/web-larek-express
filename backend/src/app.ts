@@ -3,6 +3,7 @@ import 'dotenv/config';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import path from 'path';
+import { errors } from 'celebrate';
 
 import productRoutes from './routes/product';
 import orderRoutes from './routes/order';
@@ -24,6 +25,8 @@ app.use('/product', productRoutes);
 app.use('/order', orderRoutes);
 
 app.use(errorMiddleware);
+
+app.use(errors());
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
