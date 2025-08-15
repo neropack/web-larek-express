@@ -24,16 +24,14 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
     if (existingProduct) {
       return next(new ConflictError('Продукт с таким заголовком уже существует'));
     }
-
     const product = new Product(req.body);
     await product.save();
-
     return res.status(201).json(product);
   } catch (error) {
     if (error instanceof Error && error.message.includes('E11000')) {
       return next(new ConflictError('Продукт с таким заголовком уже существует'));
     }
-    if (error instanceof Error) {
+    if (error instanceof MongooseError.ValidationError) {
       return next(new BadRequestError(error.message));
     }
     return next(error);

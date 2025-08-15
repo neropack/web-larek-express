@@ -13,7 +13,7 @@ interface IProduct {
 
 const productSchema: Schema = new Schema<IProduct>({
   title: {
-    type: String, required: true, unique: true, minlength: [2, 'Минимальная длина поля "title" - 2'], maxgth: [30, 'Максимальная длина поля "title" - 30'],
+    type: String, required: true, unique: true, minlength: [2, 'Минимальная длина поля "title" - 2'], maxlength: [30, 'Максимальная длина поля "title" - 30'],
   },
   image: { type: Object, required: true },
   category: { type: String, required: true },
