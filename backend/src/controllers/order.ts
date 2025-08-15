@@ -6,12 +6,8 @@ import BadRequestError from '../errors/bad-request-error';
 const createOrder = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const {
-      total, items, payment, email, phone, address,
+      total, items,
     } = req.body;
-
-    if (!total || !items || !payment || !email || !phone || !address) {
-      throw new Error('Данные отсутствуют');
-    }
 
     if (!Array.isArray(items) || items.length === 0) {
       return next(new BadRequestError('Items must not be an empty array'));
@@ -27,7 +23,10 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
     const orderID = faker.string.uuid();
     return res.status(200).json({ id: orderID, total: totalPrice });
   } catch (error) {
-    return next(new BadRequestError('Ошибка создания заказа'));
+    if (error instanceof Error && error.message.includes('E11000')) {
+      return next(new BadRequestError('Продукт с таким заголовком уже существует'));
+    }
+    return next(error);
   }
 };
 

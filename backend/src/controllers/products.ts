@@ -23,15 +23,6 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
       title, image, category, description, price,
     } = req.body;
 
-    if (!title || !image || !category) {
-      throw new Error('Данные отсутствуют');
-    }
-
-    // Валидация
-    if (typeof title !== 'string') {
-      throw new Error('Поле title не строка');
-    }
-
     const existingProduct = await Product.findOne({ title });
     if (existingProduct) {
       return next(new ConflictError('Продукт с таким заголовком уже существует'));
