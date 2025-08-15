@@ -26,10 +26,10 @@ app.use(express.static(path.join(__dirname, './public')));
 app.use('/product', productRoutes);
 app.use('/order', orderRoutes);
 
-app.use(errorMiddleware);
-
-app.use(errors());
 app.use(errorLogger);
+app.use(errors());
+
+app.use(errorMiddleware);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

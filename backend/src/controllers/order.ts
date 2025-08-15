@@ -2,10 +2,15 @@ import { Request, Response, NextFunction } from 'express';
 import { faker } from '@faker-js/faker';
 import Product from '../models/product';
 import BadRequestError from '../errors/bad-request-error';
+import { ad } from '@faker-js/faker/dist/airline-CLphikKp';
 
 const createOrder = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { total, items } = req.body;
+    const { total, items, payment, email, phone, address } = req.body;
+
+    if (!total || !items || !payment || !email || !phone || !address) {
+      throw new Error('Данные отсутствуют')
+    }
 
     if (!Array.isArray(items) || items.length === 0) {
       return next(new BadRequestError('Items must not be an empty array'));
