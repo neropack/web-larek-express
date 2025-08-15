@@ -8,7 +8,7 @@ import BadRequestError from '../errors/bad-request-error';
 export const getProducts = async (_: Request, res: Response, next: NextFunction) => {
   try {
     const products = await Product.find();
-    res.json({ items: products, total: products.length });
+    return res.json({ items: products, total: products.length });
   } catch (error) {
     if (error instanceof MongooseError.ValidationError) {
       return next(new BadRequestError(error.message));
@@ -28,7 +28,7 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
     const product = new Product(req.body);
     await product.save();
 
-    res.status(201).json(product);
+    return res.status(201).json(product);
   } catch (error) {
     if (error instanceof MongooseError.ValidationError) {
       return next(new BadRequestError(error.message));
