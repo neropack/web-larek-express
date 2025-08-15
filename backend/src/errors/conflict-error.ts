@@ -1,4 +1,6 @@
-class ConflictError extends Error {
+import { Error as MongooseError } from 'mongoose';
+
+class ConflictError extends MongooseError {
   public statusCode: number;
 
   constructor(message: string) {

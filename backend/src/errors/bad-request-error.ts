@@ -1,4 +1,6 @@
-class BadRequestError extends Error {
+import { Error as MongooseError } from 'mongoose';
+
+class BadRequestError extends MongooseError {
   public statusCode: number;
 
   constructor(message: string) {
